@@ -13,13 +13,7 @@ const initializeBoardState = (word) => {
   return arr;
 };
 
-// const getPreviousGuesses = (guessState) => {
-//   console.log(guessState.map((row) => row.join("")));
-//   return guessState.map((row) => row.join(""));
-// };
-
 const getCurrentWord = (guessState, guessNumber) => {
-  console.log(guessState[guessNumber].join(""));
   return guessState[guessNumber].join("");
 };
 
@@ -35,10 +29,6 @@ function Board({ word }) {
     initializeBoardState(word)
   );
 
-  // const onChange = (input) => {
-  //   console.log("Input changed", input);
-  // };
-
   const onKeyPress = (button) => {
     let btn = button;
     if (button === "{Backspace}") btn = "Backspace";
@@ -48,7 +38,6 @@ function Board({ word }) {
       key: btn,
     };
     onClickDown(input);
-    console.log("Button pressed", btn);
   };
 
   const submitWord = () => {
@@ -57,17 +46,17 @@ function Board({ word }) {
     const seen = new Set();
 
     for (let i = 0; i < word.length; i++) {
-      if (word[i] === currentWord[i]) ans.push("bg-correct text-white");
-      else if (seen.has(currentWord[i])) ans.push("bg-exist text-white");
+      if (word[i].toUpperCase() === currentWord[i].toUpperCase())
+        ans.push("bg-correct text-white");
+      else if (seen.has(currentWord[i].toUpperCase()))
+        ans.push("bg-exist text-white");
       else ans.push("bg-wrong bg-gray-600");
 
-      seen.add(word[i]);
+      seen.add(word[i].toUpperCase());
     }
 
     const tmp = [...styleState];
     tmp[guessNumber] = ans;
-
-    console.log(tmp);
 
     setStyleState(tmp);
   };
@@ -97,7 +86,7 @@ function Board({ word }) {
       setGuessState(tmp);
     } else if ("abcdefghijklmnopqrstuvwxyz".includes(event.key.toLowerCase())) {
       handleAddLetter(
-        event.key,
+        event.key.toUpperCase(),
         getCurrentWord(guessState, guessNumber),
         word.length
       );
@@ -113,9 +102,6 @@ function Board({ word }) {
     if (validateWord(getCurrentWord(guessState, guessNumber))) {
       submitWord();
       setGuessNumber(guessNumber + 1);
-      // console.log("valid");
-    } else {
-      // console.log("invalid");
     }
   };
 
@@ -127,7 +113,6 @@ function Board({ word }) {
       }
       tmp[guessNumber][currWord.length] = letter;
       setGuessState(tmp);
-      // console.log(tmp);
     }
   };
 
@@ -136,8 +121,8 @@ function Board({ word }) {
       <div
         key={letterNum}
         className={
-          "w-16 h-16 font-bold grid place-items-center border-2 border-gray " //+
-          // styleState[rowNum][letterNum]
+          "w-16 h-16 font-bold grid place-items-center border-2 border-gray " +
+          styleState[rowNum][letterNum]
         }
       >
         {letter ? letter.toUpperCase() : ""}
@@ -145,12 +130,13 @@ function Board({ word }) {
     );
   };
 
-  const RowComponent = ({ key, word }) => {
+  const RowComponent = ({ rowNum, word }) => {
+    console.log(rowNum);
     return (
-      <div key={key} className="flex flex-row">
+      <div key={rowNum} className="flex flex-row">
         {word.map((tile, letterNum) => (
           <LetterComponent
-            rowNum={key ? key : 0}
+            rowNum={rowNum ? rowNum : 0}
             letterNum={letterNum}
             letter={tile}
           />
@@ -160,10 +146,12 @@ function Board({ word }) {
   };
 
   return (
-    <div className="border-2 border-gray-300">
-      {guessState.map((guess, index) => (
-        <RowComponent key={index} word={guess} />
-      ))}
+    <div>
+      <div className="border-2 border-gray">
+        {guessState.map((guess, index) => (
+          <RowComponent rowNum={index} word={guess} />
+        ))}
+      </div>
       <Keyboard
         onKeyPress={onKeyPress}
         layout={{
