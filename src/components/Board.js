@@ -17,10 +17,14 @@ const getCurrentWord = (guessState, guessNumber) => {
   return guessState[guessNumber].join("");
 };
 
+const hasCorrectGuess = (word, guessState, guessNumber) => {
+  return getCurrentWord(guessState, guessNumber) === word.toUpperCase();
+};
+
 /*
 word: the correct word to current illordle board
 */
-function Board({ word }) {
+function Board({ word, win, lose }) {
   const [guessState, setGuessState] = React.useState(
     initializeBoardState(word)
   );
@@ -28,6 +32,7 @@ function Board({ word }) {
   const [styleState, setStyleState] = React.useState(
     initializeBoardState(word)
   );
+  const [gameOver, setGameOver] = React.useState(false);
 
   const onKeyPress = (button) => {
     let btn = button;
@@ -62,7 +67,7 @@ function Board({ word }) {
   };
 
   const validateWord = (currentWord) => {
-    const hasGuessesLeft = guessNumber < word.length;
+    const hasGuessesLeft = guessNumber <= word.length;
     // const validWord = mock.includes(currWord);
     const validWordLength = currentWord.length === word.length;
     const onlyLetters = /[a-zA-Z]/.test(currentWord);
@@ -71,6 +76,7 @@ function Board({ word }) {
   };
 
   const onClickDown = (event) => {
+    if (gameOver) return;
     if (event.key === "Enter") {
       handleEnter();
     } else if (event.key === "Backspace") {
@@ -101,6 +107,17 @@ function Board({ word }) {
   const handleEnter = () => {
     if (validateWord(getCurrentWord(guessState, guessNumber))) {
       submitWord();
+      if (hasCorrectGuess(word, guessState, guessNumber)) {
+        win();
+        setGameOver(true);
+      }
+      if (
+        guessNumber >= word.length &&
+        !hasCorrectGuess(word, guessState, guessNumber)
+      ) {
+        lose();
+        setGameOver(true);
+      }
       setGuessNumber(guessNumber + 1);
     }
   };
@@ -131,7 +148,6 @@ function Board({ word }) {
   };
 
   const RowComponent = ({ rowNum, word }) => {
-    console.log(rowNum);
     return (
       <div key={rowNum} className="flex flex-row">
         {word.map((tile, letterNum) => (
