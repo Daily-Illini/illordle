@@ -14,7 +14,7 @@ Illordle is the Illini's wordle. All the possible words are words related to UIU
 ## Tech Stack
 
 - Javascript, React
-- Endpoints exist in a different repository and are not handled by me.
+- Backend endpoints are hosted on a different repository which is not currently open source.
 
 ## Contribute
 
