@@ -12,7 +12,7 @@ import {
 } from "./utils";
 
 function App() {
-  const word = "illini";
+  const word = "daily";
   const [guessNumber, setGuessNumber] = useState(0);
   const [gameState, setGameState] = useState(GameState.InSession);
   const [styleState, setStyleState] = useState(initializeBoardState(word));
@@ -32,16 +32,15 @@ function App() {
   const submitWord = () => {
     const currentWord = getCurrentWord(guessState, guessNumber);
     const ans = [];
-    const seen = new Set();
 
     for (let i = 0; i < word.length; i++) {
       if (word[i].toUpperCase() === currentWord[i].toUpperCase())
         ans.push("bg-correct text-white");
-      else if (seen.has(currentWord[i].toUpperCase()))
+      else if (
+        word.toUpperCase().split("").includes(currentWord[i].toUpperCase())
+      )
         ans.push("bg-exist text-white");
       else ans.push("bg-wrong bg-gray-600");
-
-      seen.add(word[i].toUpperCase());
     }
 
     const tmp = [...styleState];
@@ -115,8 +114,10 @@ function App() {
       )}
 
       <h1 className="m-2 font-bold text-2xl">Illordle</h1>
-      <Board styleState={styleState} guessState={guessState} />
-      <div className="sm:w-11/12 lg:w-4/12">
+      <div className="w-11/12 md:w-max grid place-items-center">
+        <Board styleState={styleState} guessState={guessState} />
+      </div>
+      <div className="w-full lg:w-4/12">
         <Keyboard
           onKeyPress={onKeyPress}
           theme={"hg-theme-default hg-layout-default myTheme"}
