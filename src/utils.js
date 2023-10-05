@@ -29,3 +29,29 @@ export const validateWord = (currentWord, guessNumber, word) => {
 
   return hasGuessesLeft && validWordLength && onlyLetters;
 };
+
+export const createShareResultEmojis = (styleState) => {
+  console.log(styleState);
+  const styleToEmoji = {
+    "bg-correct text-white": "🟩",
+    "bg-exist text-white": "🟨",
+    "bg-wrong bg-gray-600": "⬛",
+  };
+
+  console.log(styleState[0].length);
+  console.log(Array(styleState[0].length).fill("t").join(""));
+
+  let copyText = initializeBoardState(
+    Array(styleState[0].length).fill("t").join("")
+  );
+  for (let i = 0; i < copyText.length; i++) {
+    for (let j = 0; j < copyText[i].length; j++) {
+      copyText[i][j] = styleToEmoji[styleState[i][j]];
+    }
+    copyText[i] = copyText[i].join("");
+  }
+
+  console.log(copyText);
+  console.log(copyText.join("\n"));
+  return copyText.join("\n").trim();
+};
