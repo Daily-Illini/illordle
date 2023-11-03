@@ -2,8 +2,16 @@ import React from "react";
 import { GameState } from "../utils";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createShareResultEmojis } from "../utils";
+import ArticlePreview from "./ArticlePreview";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-function GameStateModal({ gameState, setCopy, styleState, setModalOpen }) {
+function GameStateModal({
+  answer,
+  gameState,
+  setCopy,
+  styleState,
+  setModalOpen,
+}) {
   return (
     <div
       className="relative z-10"
@@ -20,32 +28,47 @@ function GameStateModal({ gameState, setCopy, styleState, setModalOpen }) {
               <div className="sm:flex sm:items-start">
                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                   <h3
-                    className="text-base font-semibold leading-6 text-gray-900"
+                    className="font-semibold leading-6 text-gray-900"
                     id="modal-title"
                   >
                     {gameState === GameState.Win ? "You Win!" : "You Lost"}
                   </h3>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      Nunc convallis, nulla at interdum ultrices, est eros
-                      posuere magna, id malesuada nibh velit quis tortor. Sed
-                      cursus nisi quis ante auctor, id tincidunt mi tincidunt.
-                      Nam ut vehicula tellus. Etiam nec massa at eros facilisis
-                      mollis. Praesent vitae
+                    {gameState === GameState.Lose && (
+                      <h4>Today's word: {answer}</h4>
+                    )}
+                    <p className="text-left text-md text-gray-500">
+                      Your Results:
                     </p>
+                    {createShareResultEmojis(styleState)[1]
+                      .split("\n")
+                      .map((row) => {
+                        return (
+                          <p className="text-left text-md text-gray-500 mt-0 mb-0">
+                            {row}
+                          </p>
+                        );
+                      })}
+
+                    <ArticlePreview
+                      article_link="https://dailyillini.com/buzz-stories/buzz-columns/music-release-monday/2023/10/31/review-illinois-theatre-rent/"
+                      picture="https://dailyillini.com/wp-content/uploads/2023/10/231025-RENT-CAP046-1200x800.jpg"
+                      heading="Review | Illinois Theatre puts on spectacular, emotional performance of 'Rent'"
+                      summary="“Rent,” a Broadway musical with music, lyrics and book by Jonathan Larson, ran at the Virginia Theatre from Oct. 26-28. The pro"
+                      authors={["Jane Doe", "John Smith"]}
+                    />
                   </div>
                 </div>
               </div>
             </div>
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <CopyToClipboard
-                text={createShareResultEmojis(styleState)}
+                text={createShareResultEmojis(styleState)[0]}
                 onCopy={() => setCopy(true)}
               >
                 <button
                   type="button"
-                  className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto"
+                  className="mt-3 inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto"
                   onClick={() => setModalOpen(false)}
                 >
                   Copy Results

@@ -1,0 +1,13 @@
+.simple-keyboard.hg-layout-default .hg-button.hg-correct {
+  background: #20aa57;
+  color: white;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-exists {
+  background: #e5b22d;
+  color: white;
+}
+
+.simple-keyboard.hg-layout-default .hg-button.hg-wrong {
+  background: #989898;
+}

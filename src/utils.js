@@ -31,15 +31,11 @@ export const validateWord = (currentWord, guessNumber, word) => {
 };
 
 export const createShareResultEmojis = (styleState) => {
-  console.log(styleState);
   const styleToEmoji = {
     "bg-correct text-white": "🟩",
     "bg-exist text-white": "🟨",
     "bg-wrong bg-gray-600": "⬛",
   };
-
-  console.log(styleState[0].length);
-  console.log(Array(styleState[0].length).fill("t").join(""));
 
   let copyText = initializeBoardState(
     Array(styleState[0].length).fill("t").join("")
@@ -51,7 +47,11 @@ export const createShareResultEmojis = (styleState) => {
     copyText[i] = copyText[i].join("");
   }
 
-  console.log(copyText);
-  console.log(copyText.join("\n"));
-  return copyText.join("\n").trim();
+  const retText =
+    "The Daily Illini's Illordle \nMy results:\n" + copyText.join("\n").trim();
+
+  return [retText, copyText.join("\n").trim()];
 };
+
+// gets word and article
+export const getData = () => {};

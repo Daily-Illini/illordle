@@ -11,6 +11,7 @@ import {
   validateWord,
 } from "./utils";
 import Toast from "./components/Toast";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   const word = "daily";
@@ -20,6 +21,9 @@ function App() {
   const [gameState, setGameState] = useState(GameState.InSession);
   const [styleState, setStyleState] = useState(initializeBoardState(word));
   const [guessState, setGuessState] = useState(initializeBoardState(word));
+  const [correctLetters, setCorrectLetters] = useState(new Set());
+  const [existsLetters, setExistsLetters] = useState(new Set());
+  const [wrongLetters, setWrongLetters] = useState(new Set());
 
   useEffect(() => {
     if (gameState !== GameState.InSession) {
@@ -41,21 +45,33 @@ function App() {
   const submitWord = () => {
     const currentWord = getCurrentWord(guessState, guessNumber);
     const ans = [];
+    const correct_letters = correctLetters;
+    const exists_letters = existsLetters;
+    const wrong_letters = wrongLetters;
 
     for (let i = 0; i < word.length; i++) {
-      if (word[i].toUpperCase() === currentWord[i].toUpperCase())
+      if (word[i].toUpperCase() === currentWord[i].toUpperCase()) {
         ans.push("bg-correct text-white");
-      else if (
+        correct_letters.add(currentWord[i].toUpperCase());
+        exists_letters.delete(currentWord[i].toUpperCase());
+      } else if (
         word.toUpperCase().split("").includes(currentWord[i].toUpperCase())
-      )
+      ) {
         ans.push("bg-exist text-white");
-      else ans.push("bg-wrong bg-gray-600");
+        exists_letters.add(currentWord[i].toUpperCase());
+      } else {
+        wrong_letters.add(currentWord[i].toUpperCase());
+        ans.push("bg-wrong bg-gray-600");
+      }
     }
 
     const tmp = [...styleState];
     tmp[guessNumber] = ans;
 
     setStyleState(tmp);
+    setCorrectLetters(correct_letters);
+    setExistsLetters(exists_letters);
+    setWrongLetters(wrong_letters);
   };
 
   const handleEnter = () => {
@@ -117,45 +133,57 @@ function App() {
   });
 
   return (
-    <div className="grid place-items-center">
-      {modalOpen && (
+    <div>
+      {modalOpen ? (
         <GameStateModal
+          answer={word}
           gameState={gameState}
           setCopy={setCopy}
           styleState={styleState}
           setModalOpen={setModalOpen}
         />
+      ) : (
+        <div className="grid place-items-center w-full">
+          {copy && <Toast setOpen={setCopy} />}
+          <div>
+            <h1 className="mb-4 m-2 font-bold text-3xl">Illordle</h1>
+          </div>
+          <div className="w-11/12 md:w-max grid place-items-center">
+            <Board styleState={styleState} guessState={guessState} />
+          </div>
+          <div className="w-full lg:w-4/12">
+            <Keyboard
+              onKeyPress={onKeyPress}
+              theme={"hg-theme-default hg-layout-default myTheme"}
+              layout={{
+                default: [
+                  "Q W E R T Y U I O P",
+                  "A S D F G H J K L",
+                  "{Enter} Z X C V B N M {Backspace}",
+                ],
+              }}
+              display={{
+                "{Enter}": "return",
+                "{Backspace}": "⌫",
+              }}
+              buttonTheme={[
+                {
+                  class: "hg-wrong",
+                  buttons: Array.from(wrongLetters).join(" "),
+                },
+                {
+                  class: "hg-exists",
+                  buttons: Array.from(existsLetters).join(" "),
+                },
+                {
+                  class: "hg-correct",
+                  buttons: Array.from(correctLetters).join(" "),
+                },
+              ]}
+            />
+          </div>
+        </div>
       )}
-
-      {copy && <Toast setOpen={setCopy} />}
-
-      <h1 className="m-2 font-bold text-2xl">Illordle</h1>
-      <div className="w-11/12 md:w-max grid place-items-center">
-        <Board styleState={styleState} guessState={guessState} />
-      </div>
-      <div className="w-full lg:w-4/12">
-        <Keyboard
-          onKeyPress={onKeyPress}
-          theme={"hg-theme-default hg-layout-default myTheme"}
-          layout={{
-            default: [
-              "Q W E R T Y U I O P",
-              "A S D F G H J K L",
-              "{Enter} Z X C V B N M {Backspace}",
-            ],
-          }}
-          display={{
-            "{Enter}": "return",
-            "{Backspace}": "⌫",
-          }}
-          buttonTheme={[
-            {
-              className: "hg-correct",
-              buttons: "Q W E R T Y q w e r t y",
-            },
-          ]}
-        />
-      </div>
     </div>
   );
 }

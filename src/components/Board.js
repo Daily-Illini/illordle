@@ -1,10 +1,11 @@
 import React from "react";
 import "react-simple-keyboard/build/css/index.css";
+import { motion } from "framer-motion";
 
 /*
 word: the correct word to current illordle board
 */
-function Board({ styleState, guessState }) {
+function Board({ styleState, guessState, rowIndexAnimation }) {
   const LetterComponent = ({ letter, letterNum, rowNum }) => {
     return (
       <div
@@ -36,9 +37,15 @@ function Board({ styleState, guessState }) {
   return (
     <div>
       <div className="mb-3">
-        {guessState.map((guess, index) => (
-          <RowComponent rowNum={index} word={guess} />
-        ))}
+        {guessState.map((guess, index) =>
+          index === rowIndexAnimation ? (
+            <motion.div>
+              <RowComponent rowNum={index} word={guess} />
+            </motion.div>
+          ) : (
+            <RowComponent rowNum={index} word={guess} />
+          )
+        )}
       </div>
     </div>
   );
