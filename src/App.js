@@ -13,8 +13,15 @@ import {
 import Toast from "./components/Toast";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function App() {
-  const word = "daily";
+function App({ apiResponse }) {
+  const date = new Date(apiResponse["date"]).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+  const word = apiResponse["word"];
+
   const [guessNumber, setGuessNumber] = useState(0);
   const [copy, setCopy] = useState(false); //holds state on whether or not the results have bene copied
   const [modalOpen, setModalOpen] = useState(false);
@@ -146,7 +153,7 @@ function App() {
         <div className="grid place-items-center w-full">
           {copy && <Toast setOpen={setCopy} />}
           <div>
-            <h1 className="mb-4 m-2 font-bold text-3xl">Illordle</h1>
+            <h1 className="mb-4 m-2 font-bold text-3xl">{date}</h1>
           </div>
           <div className="w-11/12 md:w-max grid place-items-center">
             <Board styleState={styleState} guessState={guessState} />
