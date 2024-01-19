@@ -56,20 +56,40 @@ function App({ apiResponse }) {
     const exists_letters = existsLetters;
     const wrong_letters = wrongLetters;
 
+    const letterCount = new Map();
+    const correctCount = new Map();
     for (let i = 0; i < word.length; i++) {
-      if (word[i].toUpperCase() === currentWord[i].toUpperCase()) {
+      const letter = word[i].toUpperCase();
+      const currentLetter = currentWord[i].toUpperCase();
+      letterCount.set(letter, (letterCount.get(letter) ?? 0) + 1);
+      if (letter === currentLetter) {
+        correctCount.set(letter, (correctCount.get(letter) ?? 0) + 1);
+      }
+    }
+
+    for (let i = 0; i < word.length; i++) {
+      const letter = word[i].toUpperCase();
+      const currentLetter = currentWord[i].toUpperCase();
+      if (letter === currentLetter) {
         ans.push("bg-correct text-white");
-        correct_letters.add(currentWord[i].toUpperCase());
-        exists_letters.delete(currentWord[i].toUpperCase());
-      } else if (
-        word.toUpperCase().split("").includes(currentWord[i].toUpperCase())
-      ) {
-        ans.push("bg-exist text-white");
-        exists_letters.add(currentWord[i].toUpperCase());
+        correct_letters.add(currentLetter);
+        exists_letters.delete(currentLetter);
+      } else if (letterCount.has(currentLetter)) {
+        if (correctCount.get(currentLetter) === letterCount.get(currentLetter)) {
+          ans.push("bg-wrong bg-gray-600");
+        } else {
+          ans.push("bg-exist text-white");
+          if (!correctCount.has(currentLetter)) {
+            exists_letters.add(currentLetter);
+          }
+        }
       } else {
-        wrong_letters.add(currentWord[i].toUpperCase());
+        wrong_letters.add(currentLetter);
         ans.push("bg-wrong bg-gray-600");
       }
+    }
+    for (let i = 0; i < word.length; i++) {
+
     }
 
     const tmp = [...styleState];
