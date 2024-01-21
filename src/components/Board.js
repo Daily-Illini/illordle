@@ -6,13 +6,12 @@ import { motion } from "framer-motion";
 word: the correct word to current illordle board
 */
 function Board({ styleState, guessState, rowIndexAnimation }) {
-  const LetterComponent = ({ letter, letterNum, rowNum, wordLength }) => {
+  const LetterComponent = ({ letter, letterNum, rowNum }) => {
     return (
       <div
         key={letterNum}
         className={
-          "font-bold grid place-items-center border-2 border-gray m-0.5 aspect-square " +
-          `w-1/${wordLength} ` +
+          "flex-1 aspect-square font-bold grid place-items-center border-2 border-gray m-0.5 " +
           styleState[rowNum][letterNum]
         }
       >
@@ -29,7 +28,6 @@ function Board({ styleState, guessState, rowIndexAnimation }) {
             rowNum={rowNum ? rowNum : 0}
             letterNum={letterNum}
             letter={tile}
-            wordLength={word.length}
           />
         ))}
       </div>

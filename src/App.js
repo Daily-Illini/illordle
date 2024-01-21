@@ -31,7 +31,6 @@ function App({ wordData, dictionary }) {
   const [correctLetters, setCorrectLetters] = useState(new Set());
   const [existsLetters, setExistsLetters] = useState(new Set());
   const [wrongLetters, setWrongLetters] = useState(new Set());
-  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (gameState !== GameState.InSession) {
