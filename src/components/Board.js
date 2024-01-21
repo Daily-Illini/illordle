@@ -11,11 +11,13 @@ function Board({ styleState, guessState, rowIndexAnimation }) {
       <div
         key={letterNum}
         className={
-          "flex-1 aspect-square font-bold grid place-items-center border-2 border-gray m-0.5 " +
+          "flex-1 aspect-square font-bold grid place-items-center border-2 border-gray m-0.5 align-middle " +
           styleState[rowNum][letterNum]
         }
       >
-        {letter ? letter.toUpperCase() : ""}
+        <div className="flex flex-col h-full justify-center">
+          {letter ? letter.toUpperCase() : ""}
+        </div>
       </div>
     );
   };
