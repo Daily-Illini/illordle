@@ -38,7 +38,7 @@ function Board({ styleState, guessState, rowIndexAnimation }) {
 
   return (
     <div>
-      <div className="mb-3 w-[93vw] max-w-md">
+      <div className="mb-3 w-[75vw] max-w-md">
         {guessState.map((guess, index) =>
           index === rowIndexAnimation ? (
             <motion.div>
