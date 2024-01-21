@@ -6,12 +6,13 @@ import { motion } from "framer-motion";
 word: the correct word to current illordle board
 */
 function Board({ styleState, guessState, rowIndexAnimation }) {
-  const LetterComponent = ({ letter, letterNum, rowNum }) => {
+  const LetterComponent = ({ letter, letterNum, rowNum, wordLength }) => {
     return (
       <div
         key={letterNum}
         className={
-          "w-16 h-16 font-bold grid place-items-center border-2 border-gray m-0.5 " +
+          "font-bold grid place-items-center border-2 border-gray m-0.5 aspect-square " +
+          `w-1/${wordLength} ` +
           styleState[rowNum][letterNum]
         }
       >
@@ -22,12 +23,13 @@ function Board({ styleState, guessState, rowIndexAnimation }) {
 
   const RowComponent = ({ rowNum, word }) => {
     return (
-      <div key={rowNum} className="flex flex-row">
+      <div key={rowNum} className="flex flex-row w-full">
         {word.map((tile, letterNum) => (
           <LetterComponent
             rowNum={rowNum ? rowNum : 0}
             letterNum={letterNum}
             letter={tile}
+            wordLength={word.length}
           />
         ))}
       </div>
@@ -36,7 +38,7 @@ function Board({ styleState, guessState, rowIndexAnimation }) {
 
   return (
     <div>
-      <div className="mb-3">
+      <div className="mb-3 w-[93vw] max-w-md">
         {guessState.map((guess, index) =>
           index === rowIndexAnimation ? (
             <motion.div>
