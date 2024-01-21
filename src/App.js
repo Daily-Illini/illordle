@@ -13,17 +13,17 @@ import {
 import Toast from "./components/Toast";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-function App({ apiResponse }) {
-  const date = new Date(apiResponse["date"]).toLocaleDateString("en-US", {
+function App({ wordData, dictionary }) {
+  const date = new Date(wordData["date"]).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
     timeZone: "UTC",
   });
-  const word = apiResponse["word"];
+  const word = wordData["word"].toUpperCase();
 
   const [guessNumber, setGuessNumber] = useState(0);
-  const [copy, setCopy] = useState(false); //holds state on whether or not the results have bene copied
+  const [toastMessage, setToastMessage] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [gameState, setGameState] = useState(GameState.InSession);
   const [styleState, setStyleState] = useState(initializeBoardState(word));
@@ -31,12 +31,21 @@ function App({ apiResponse }) {
   const [correctLetters, setCorrectLetters] = useState(new Set());
   const [existsLetters, setExistsLetters] = useState(new Set());
   const [wrongLetters, setWrongLetters] = useState(new Set());
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     if (gameState !== GameState.InSession) {
       setModalOpen(true);
     }
   }, [gameState]);
+
+  const showMessage = message => {
+    console.log(message);
+    setToastMessage(message);
+    setTimeout(() => {
+      setToastMessage(""); // hide the message after 1 second
+    }, 1000);
+  }
 
   const onKeyPress = (button) => {
     let formattedBtn = button;
@@ -50,7 +59,7 @@ function App({ apiResponse }) {
   };
 
   const submitWord = () => {
-    const currentWord = getCurrentWord(guessState, guessNumber);
+    const currentWord = getCurrentWord(guessState, guessNumber).toUpperCase();
     const ans = [];
     const correct_letters = correctLetters;
     const exists_letters = existsLetters;
@@ -59,26 +68,29 @@ function App({ apiResponse }) {
     const letterCount = new Map();
     const correctCount = new Map();
     for (let i = 0; i < word.length; i++) {
-      const letter = word[i].toUpperCase();
-      const currentLetter = currentWord[i].toUpperCase();
+      const letter = word[i];
+      const currentLetter = currentWord[i];
       letterCount.set(letter, (letterCount.get(letter) ?? 0) + 1);
       if (letter === currentLetter) {
         correctCount.set(letter, (correctCount.get(letter) ?? 0) + 1);
       }
     }
 
+    const existsCount = new Map();
     for (let i = 0; i < word.length; i++) {
-      const letter = word[i].toUpperCase();
-      const currentLetter = currentWord[i].toUpperCase();
+      const letter = word[i];
+      const currentLetter = currentWord[i];
       if (letter === currentLetter) {
         ans.push("bg-correct text-white");
         correct_letters.add(currentLetter);
         exists_letters.delete(currentLetter);
       } else if (letterCount.has(currentLetter)) {
-        if (correctCount.get(currentLetter) === letterCount.get(currentLetter)) {
+        const remaining = letterCount.get(currentLetter) - (correctCount.get(currentLetter) ?? 0);
+        if (remaining <= (existsCount.get(currentLetter) ?? 0)) {
           ans.push("bg-wrong bg-gray-600");
         } else {
           ans.push("bg-exist text-white");
+          existsCount.set(currentLetter, (existsCount.get(currentLetter) ?? 0) + 1);
           if (!correctCount.has(currentLetter)) {
             exists_letters.add(currentLetter);
           }
@@ -87,9 +99,6 @@ function App({ apiResponse }) {
         wrong_letters.add(currentLetter);
         ans.push("bg-wrong bg-gray-600");
       }
-    }
-    for (let i = 0; i < word.length; i++) {
-
     }
 
     const tmp = [...styleState];
@@ -102,20 +111,23 @@ function App({ apiResponse }) {
   };
 
   const handleEnter = () => {
-    if (
-      validateWord(getCurrentWord(guessState, guessNumber), guessNumber, word)
-    ) {
-      submitWord();
-      if (hasCorrectGuess(word, guessState, guessNumber)) {
-        setGameState(GameState.Win);
+    const currentWord = getCurrentWord(guessState, guessNumber).toUpperCase();
+    if (validateWord(currentWord, guessNumber, word)) {
+      if (currentWord === word || dictionary.has(currentWord)) {
+        submitWord();
+        if (hasCorrectGuess(word, guessState, guessNumber)) {
+          setGameState(GameState.Win);
+        }
+        if (
+          guessNumber >= word.length &&
+          !hasCorrectGuess(word, guessState, guessNumber)
+        ) {
+          setGameState(GameState.Lose);
+        }
+        setGuessNumber(guessNumber + 1);
+      } else {
+        showMessage("Not in word list");
       }
-      if (
-        guessNumber >= word.length &&
-        !hasCorrectGuess(word, guessState, guessNumber)
-      ) {
-        setGameState(GameState.Lose);
-      }
-      setGuessNumber(guessNumber + 1);
     }
   };
 
@@ -165,16 +177,16 @@ function App({ apiResponse }) {
         <GameStateModal
           answer={word}
           gameState={gameState}
-          setCopy={setCopy}
+          showMessage={showMessage}
           styleState={styleState}
           setModalOpen={setModalOpen}
         />
       ) : (
-        <div className="grid place-items-center w-full">
-          {copy && <Toast setOpen={setCopy} />}
+        <div className="grid place-items-center w-full relative">
           <div>
             <h1 className="mb-4 m-2 font-bold text-3xl">{date}</h1>
           </div>
+          <Toast message={toastMessage}></Toast>
           <div className="w-11/12 md:w-max grid place-items-center">
             <Board styleState={styleState} guessState={guessState} />
           </div>

@@ -8,7 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function GameStateModal({
   answer,
   gameState,
-  setCopy,
+  showMessage,
   styleState,
   setModalOpen,
 }) {
@@ -64,7 +64,7 @@ function GameStateModal({
             <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <CopyToClipboard
                 text={createShareResultEmojis(styleState)[0]}
-                onCopy={() => setCopy(true)}
+                onCopy={() => showMessage("Result copied")}
               >
                 <button
                   type="button"
