@@ -8,6 +8,9 @@ module.exports = {
         exist: "#E5B22D",
         wrong: "#989898",
       },
+      fontFamily: {
+        "sans": "Montserrat",
+      },
     },
   },
   plugins: [],

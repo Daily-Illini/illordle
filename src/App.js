@@ -11,7 +11,6 @@ import {
   validateWord,
 } from "./utils";
 import Toast from "./components/Toast";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 function App({ wordData, dictionary }) {
   const date = new Date(wordData["date"]).toLocaleDateString("en-US", {
@@ -21,6 +20,9 @@ function App({ wordData, dictionary }) {
     timeZone: "UTC",
   });
   const word = wordData["word"].toUpperCase();
+  const author = wordData["author"];
+  const storyTitle = wordData["story_title"];
+  const storyUrl = wordData["story_url"];
 
   const [guessNumber, setGuessNumber] = useState(0);
   const [toastMessage, setToastMessage] = useState("");
@@ -175,6 +177,9 @@ function App({ wordData, dictionary }) {
       {modalOpen ? (
         <GameStateModal
           answer={word}
+          author={author}
+          storyTitle={storyTitle}
+          storyUrl={storyUrl}
           gameState={gameState}
           showMessage={showMessage}
           styleState={styleState}
@@ -183,7 +188,7 @@ function App({ wordData, dictionary }) {
       ) : (
         <div className="grid place-items-center w-full relative">
           <div>
-            <h1 className="mb-4 m-2 font-bold text-3xl">{date}</h1>
+            <h1 className="mb-4 m-2 font-bold text-2xl">{date}</h1>
           </div>
           <Toast message={toastMessage}></Toast>
           <div className="w-11/12 md:w-max grid place-items-center">
