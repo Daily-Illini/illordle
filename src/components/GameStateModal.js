@@ -21,6 +21,7 @@ function GameStateModal({
       role="dialog"
       aria-modal="true"
     >
+      <div className="fixed inset-0 bg-white bg-opacity-90 transition-opacity"></div>
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto p-4">
         <div className="flex flex-col h-full justify-center items-center">
           <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all max-w-sm ring-1 ring-gray-300">

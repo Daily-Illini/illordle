@@ -174,7 +174,7 @@ function App({ wordData, dictionary }) {
 
   return (
     <div>
-      {modalOpen ? (
+      {modalOpen && (
         <GameStateModal
           answer={word}
           author={author}
@@ -185,48 +185,47 @@ function App({ wordData, dictionary }) {
           styleState={styleState}
           setModalOpen={setModalOpen}
         />
-      ) : (
-        <div className="grid place-items-center w-full relative">
-          <div>
-            <h1 className="mb-4 m-2 font-bold text-2xl">{date}</h1>
-          </div>
-          <Toast message={toastMessage}></Toast>
-          <div className="w-11/12 md:w-max grid place-items-center">
-            <Board styleState={styleState} guessState={guessState} />
-          </div>
-          <div className="w-full lg:w-4/12">
-            <Keyboard
-              onKeyPress={onKeyPress}
-              theme={"hg-theme-default hg-layout-default myTheme"}
-              layout={{
-                default: [
-                  "Q W E R T Y U I O P",
-                  "A S D F G H J K L",
-                  "{Enter} Z X C V B N M {Backspace}",
-                ],
-              }}
-              display={{
-                "{Enter}": "return",
-                "{Backspace}": "⌫",
-              }}
-              buttonTheme={[
-                {
-                  class: "hg-wrong",
-                  buttons: Array.from(wrongLetters).join(" "),
-                },
-                {
-                  class: "hg-exists",
-                  buttons: Array.from(existsLetters).join(" "),
-                },
-                {
-                  class: "hg-correct",
-                  buttons: Array.from(correctLetters).join(" "),
-                },
-              ]}
-            />
-          </div>
-        </div>
       )}
+      <div className="grid place-items-center w-full relative">
+        <div>
+          <h1 className="mb-4 m-2 font-bold text-2xl">{date}</h1>
+        </div>
+        <Toast message={toastMessage}></Toast>
+        <div className="w-11/12 md:w-max grid place-items-center">
+          <Board styleState={styleState} guessState={guessState} />
+        </div>
+        <div className="w-full lg:w-4/12">
+          <Keyboard
+            onKeyPress={onKeyPress}
+            theme={"hg-theme-default hg-layout-default myTheme"}
+            layout={{
+              default: [
+                "Q W E R T Y U I O P",
+                "A S D F G H J K L",
+                "{Enter} Z X C V B N M {Backspace}",
+              ],
+            }}
+            display={{
+              "{Enter}": "return",
+              "{Backspace}": "⌫",
+            }}
+            buttonTheme={[
+              {
+                class: "hg-wrong",
+                buttons: Array.from(wrongLetters).join(" "),
+              },
+              {
+                class: "hg-exists",
+                buttons: Array.from(existsLetters).join(" "),
+              },
+              {
+                class: "hg-correct",
+                buttons: Array.from(correctLetters).join(" "),
+              },
+            ]}
+          />
+        </div>
+      </div>
     </div>
   );
 }
