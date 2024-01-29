@@ -173,23 +173,20 @@ function App({ wordData, dictionary }) {
   });
 
   return (
-    <div>
-      {modalOpen && (
-        <GameStateModal
-          answer={word}
-          author={author}
-          storyTitle={storyTitle}
-          storyUrl={storyUrl}
-          gameState={gameState}
-          showMessage={showMessage}
-          styleState={styleState}
-          setModalOpen={setModalOpen}
-        />
-      )}
-      <div className="grid place-items-center w-full relative">
-        <div>
-          <h1 className="mb-4 m-2 font-bold text-2xl">{date}</h1>
-        </div>
+    <div className="relative">
+      <GameStateModal
+        answer={word}
+        date={date}
+        author={author}
+        storyTitle={storyTitle}
+        storyUrl={storyUrl}
+        gameState={gameState}
+        showMessage={showMessage}
+        styleState={styleState}
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+      />
+      <div className="grid place-items-center w-full relative mt-6">
         <Toast message={toastMessage}></Toast>
         <div className="w-11/12 md:w-max grid place-items-center">
           <Board styleState={styleState} guessState={guessState} />

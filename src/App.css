@@ -11,15 +11,3 @@
 .simple-keyboard.hg-layout-default .hg-button.hg-wrong {
   background: #989898;
 }
-
-@keyframes shake {
-  0% { transform: translateX(10px); }
-  25% { transform: translateX(-10px); }
-  50% { transform: translateX(10px); }
-  75% { transform: translateX(-10px); }
-  100% { transform: translateX(0px); }
-}
-.shake {
-  animation: shake 0.5s;
-  animation-iteration-count: 1;
-}
