@@ -53,8 +53,8 @@ function GameStateModal({
                   <h1 className="font-bold text-md text-gray-900 mb-1">Catch up on local news</h1>
                   <a
                     href="https://dailyillini.com"
-                    className="underline text-black"
-                    rel="noreferrer"
+                    target="_top"
+                    className="underline"
                   >
                     Go to The Daily Illini
                   </a>
