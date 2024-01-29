@@ -16,6 +16,18 @@ function GameStateModal({
   modalOpen,
   setModalOpen,
 }) {
+  const shareResult = async () => {
+    const toShare = createShareResultEmojis(styleState)[0];
+    if (window.innerWidth < 600) { // mobile device
+      try {
+        await navigator.share({ text: toShare });
+      } catch {}
+    } else {
+      navigator.clipboard.writeText(toShare);
+      showMessage("Results copied");
+    }
+  }
+
   return (
     <div
       className={`absolute w-full h-full z-10 transition-opacity duration-1000 ${modalOpen ? "delay-[2000ms]" : "opacity-0 pointer-events-none"}`}
@@ -62,17 +74,13 @@ function GameStateModal({
               }
             </div>
             <div className="bg-gray-50 px-4 py-3 flex flex-row-reverse ">
-              <CopyToClipboard
-                text={createShareResultEmojis(styleState)[0]}
-                onCopy={() => showMessage("Results copied")}
+              <button
+                type="button"
+                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500 sm:w-auto ml-3"
+                onClick={shareResult}
               >
-                <button
-                  type="button"
-                  className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500 sm:w-auto ml-3"
-                >
-                  Share results
-                </button>
-              </CopyToClipboard>
+                Share results
+              </button>
             </div>
           </div>
         </div>
