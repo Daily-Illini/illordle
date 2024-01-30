@@ -50,7 +50,7 @@ function Board({ styleState, guessState }) {
 
   return (
     <div>
-      <div className="mb-3 w-[75vw] max-w-md">
+      <div className="mb-3 w-[75vw] max-w-xs">
         {guessState.map((guess, index) =>
           <RowComponent rowNum={index} word={guess} rowStyle={styleState[index]} />
         )}
