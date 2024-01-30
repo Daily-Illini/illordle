@@ -6,7 +6,6 @@ word: the correct word to current illordle board
 */
 function Board({ styleState, guessState }) {
   const LetterComponent = useCallback(({ letter, style, letterNum, rowNum }) => {
-    console.log(letter);
     return (
       <div
         key={`(${rowNum},${letterNum})`}
@@ -50,7 +49,7 @@ function Board({ styleState, guessState }) {
 
   return (
     <div>
-      <div className="mb-3 w-[75vw] max-w-xs">
+      <div className="mb-3 w-[75vw] max-w-sm">
         {guessState.map((guess, index) =>
           <RowComponent rowNum={index} word={guess} rowStyle={styleState[index]} />
         )}

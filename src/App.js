@@ -191,7 +191,7 @@ function App({ wordData, dictionary }) {
         <div className="w-11/12 md:w-max grid place-items-center">
           <Board styleState={styleState} guessState={guessState} />
         </div>
-        <div className="w-full lg:w-4/12">
+        <div className="w-full lg:max-w-sm">
           <Keyboard
             onKeyPress={onKeyPress}
             theme={"hg-theme-default hg-layout-default myTheme"}
