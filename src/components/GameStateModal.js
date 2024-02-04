@@ -18,7 +18,7 @@ function GameStateModal({
 }) {
   const shareResult = async () => {
     const toShare = createShareResultEmojis(styleState)[0];
-    if (window.top.innerWidth < 600) { // mobile device
+    if (window.innerWidth < 600) { // mobile device
       try {
         await navigator.share({ text: toShare });
       } catch {}
