@@ -8,6 +8,7 @@ module.exports = {
         exist: "#e5b22d",
         wrong: "#7a7a7a",
         "wrong-dark": "#363636",
+        "zinc-550": "#63636b",
       },
       fontFamily: {
         "sans": "Montserrat",
