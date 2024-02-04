@@ -173,6 +173,7 @@ function App({ wordData, dictionary }) {
   });
 
   const onMessage = (event) => {
+    console.log("message: " + event.data);
     if (event.data === "darkTheme") {
       document.documentElement.classList.add("dark");
     } else if (event.data === "lightTheme") {
