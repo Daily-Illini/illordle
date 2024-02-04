@@ -172,20 +172,6 @@ function App({ wordData, dictionary }) {
     return () => window.removeEventListener("keydown", onClickDown);
   });
 
-  const onMessage = (event) => {
-    console.log("message: " + event.data);
-    if (event.data === "darkTheme") {
-      document.documentElement.classList.add("dark");
-    } else if (event.data === "lightTheme") {
-      document.documentElement.classList.remove("dark");
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  });
-
   return (
     <div className="relative">
       <GameStateModal

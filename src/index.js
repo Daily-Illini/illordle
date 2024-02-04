@@ -9,6 +9,10 @@ const [wordData, dictionary] = await Promise.all([
   fetch("./words.txt").then(response => response.text()).then(data => new Set(data.split("\n"))),
 ]);
 
+if (window.top.innerWidth < 600) { // mobile device
+  document.documentElement.classList.add("dark");
+}
+
 root.render(
   <React.StrictMode>
     <App wordData={wordData} dictionary={dictionary} />
