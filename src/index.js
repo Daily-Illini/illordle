@@ -9,7 +9,7 @@ const [wordData, dictionary] = await Promise.all([
   fetch("./words.txt").then(response => response.text()).then(data => new Set(data.split("\n"))),
 ]);
 
-if (window.innerWidth < 600) { // mobile device
+if (window.innerWidth < 550) { // mobile device
   document.documentElement.classList.add("dark");
 }
 
