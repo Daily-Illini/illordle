@@ -88,7 +88,7 @@ function App({ wordData, dictionary }) {
       } else if (letterCount.has(currentLetter)) {
         const remaining = letterCount.get(currentLetter) - (correctCount.get(currentLetter) ?? 0);
         if (remaining <= (existsCount.get(currentLetter) ?? 0)) {
-          ans.push("bg-wrong bg-gray-600");
+          ans.push("bg-wrong dark:bg-wrong-dark text-white");
         } else {
           ans.push("bg-exist text-white");
           existsCount.set(currentLetter, (existsCount.get(currentLetter) ?? 0) + 1);
@@ -98,7 +98,7 @@ function App({ wordData, dictionary }) {
         }
       } else {
         wrong_letters.add(currentLetter);
-        ans.push("bg-wrong bg-gray-600");
+        ans.push("bg-wrong dark:bg-wrong-dark text-white");
       }
     }
 
@@ -170,6 +170,19 @@ function App({ wordData, dictionary }) {
   useEffect(() => {
     window.addEventListener("keydown", onClickDown);
     return () => window.removeEventListener("keydown", onClickDown);
+  });
+
+  const onMessage = (event) => {
+    if (event.data === "darkTheme") {
+      document.documentElement.classList.add("dark");
+    } else if (event.data === "lightTheme") {
+      document.documentElement.classList.remove("dark");
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
   });
 
   return (

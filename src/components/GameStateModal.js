@@ -35,26 +35,26 @@ function GameStateModal({
       role="dialog"
       aria-modal="true"
     >
-      <div className="absolute inset-0 bg-white bg-opacity-90 transition-opacity"></div>
+      <div className="absolute inset-0 bg-white dark:bg-black bg-opacity-90 dark:bg-opacity-90 transition-opacity"></div>
       <div className="absolute inset-0 z-10 w-screen overflow-y-auto p-4">
         <div className="flex flex-col h-full justify-center items-center">
-          <div className="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all min-w-[320px] max-w-[384px] ring-1 ring-gray-300">
-            <div className="px-6 pb-4 pt-5 text-center">
+          <div className="relative transform overflow-hidden rounded-lg bg-white dark:bg-zinc-700 shadow-xl transition-all min-w-[320px] max-w-[384px] ring-1 ring-gray-300 dark:ring-zinc-800">
+            <div className="px-6 pb-4 pt-5 text-center text-gray-900 dark:text-white">
               <h1
-                className="font-bold text-2xl text-gray-900 mt-3 mb-6"
+                className="font-bold text-2xl mt-3 mb-6"
                 id="modal-title"
               >
                 {gameState === GameState.Win ? "You win!" : "You lost"}
               </h1>
               <div className="mb-6">
-                <h1 className="font-bold text-md text-gray-900">Today's word: {answer}</h1>
-                <p className="text-md text-gray-500">{date}</p>
-                {author && <p className="text-md text-gray-500">Edited by {author}</p>}
+                <h1 className="font-bold text-md">Today's word: {answer}</h1>
+                <p className="text-md text-gray-500 dark:text-zinc-300">{date}</p>
+                {author && <p className="text-md text-gray-500 dark:text-zinc-300">Edited by {author}</p>}
               </div>
               {
                 storyTitle ?
                 <div className="mb-3">
-                  <h1 className="font-bold text-md text-gray-900 mb-1">Related to this word</h1>
+                  <h1 className="font-bold text-md mb-1">Related to this word</h1>
                   <ArticlePreview
                     title={storyTitle}
                     url={storyUrl}
@@ -62,7 +62,7 @@ function GameStateModal({
                 </div>
                 :
                 <div className="mb-3">
-                  <h1 className="font-bold text-md text-gray-900 mb-1">Catch up on local news</h1>
+                  <h1 className="font-bold text-md mb-1">Catch up on local news</h1>
                   <a
                     href="https://dailyillini.com"
                     target="_top"
@@ -73,10 +73,10 @@ function GameStateModal({
                 </div>
               }
             </div>
-            <div className="bg-gray-50 px-4 py-3 flex flex-row-reverse ">
+            <div className="bg-gray-50 dark:bg-zinc-800 px-4 py-3 flex flex-row-reverse ">
               <button
                 type="button"
-                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-green-500 sm:w-auto ml-3"
+                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:w-auto ml-3"
                 onClick={shareResult}
               >
                 Share results

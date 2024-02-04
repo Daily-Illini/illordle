@@ -10,13 +10,13 @@ function Board({ styleState, guessState }) {
       <div
         key={`(${rowNum},${letterNum})`}
         className={
-          "flex-1 aspect-square border-2 border-gray m-0.5 font-bold flip-card " +
+          "flex-1 aspect-square m-1 text-2xl font-bold flip-card " +
           (style ? "flipped " : " ")
         }
         style={{ transitionDelay: `${250 * letterNum}ms` }}
       >
         <div
-          className="flex flex-col justify-center items-center card-front"
+          className="flex flex-col border-2 border-neutral-200 dark:border-neutral-600 justify-center items-center card-front dark:text-white"
         >
           {letter ? letter.toUpperCase() : ""}
         </div>
@@ -49,7 +49,7 @@ function Board({ styleState, guessState }) {
 
   return (
     <div>
-      <div className="mb-3 w-[75vw] max-w-sm">
+      <div className="mb-3 w-[80vw] max-w-sm">
         {guessState.map((guess, index) =>
           <RowComponent rowNum={index} word={guess} rowStyle={styleState[index]} />
         )}

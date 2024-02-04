@@ -9,5 +9,24 @@
 }
 
 .simple-keyboard.hg-layout-default .hg-button.hg-wrong {
-  background: #989898;
+  background: #7a7a7a;
+  color: white;
+}
+
+.dark .simple-keyboard.hg-layout-default .hg-button.hg-wrong {
+  background: #363636;
+}
+
+.dark {
+  background: #000000;
+}
+
+.dark .simple-keyboard.myTheme {
+  background: #1c1c1c;
+}
+
+.dark .simple-keyboard .hg-button {
+  background: #6d6d6d;
+  border-color: #1f1f1f;
+  color: white;
 }

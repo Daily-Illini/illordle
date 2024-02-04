@@ -4,14 +4,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        correct: "#20AA57",
-        exist: "#E5B22D",
-        wrong: "#989898",
+        correct: "#20aa57",
+        exist: "#e5b22d",
+        wrong: "#7a7a7a",
+        "wrong-dark": "#363636",
       },
       fontFamily: {
         "sans": "Montserrat",
       },
     },
   },
+  darkMode: "class",
   plugins: [],
 };
