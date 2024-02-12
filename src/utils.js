@@ -31,18 +31,18 @@ export const validateWord = (currentWord, guessNumber, word) => {
 };
 
 export const createShareResultEmojis = (styleState) => {
-  const styleToEmoji = {
-    "bg-correct text-white": "🟩",
-    "bg-exist text-white": "🟨",
-    "bg-wrong bg-gray-600": "⬛",
-  };
-
   let copyText = initializeBoardState(
     Array(styleState[0].length).fill("t").join("")
   );
   for (let i = 0; i < copyText.length; i++) {
     for (let j = 0; j < copyText[i].length; j++) {
-      copyText[i][j] = styleToEmoji[styleState[i][j]];
+      if (styleState[i][j].includes("correct")) {
+        copyText[i][j] = "🟩";
+      } else if (styleState[i][j].includes("exist")) {
+        copyText[i][j] = "🟨";
+      } else if (styleState[i][j].includes("wrong")) {
+        copyText[i][j] = "⬛";
+      }
     }
     copyText[i] = copyText[i].join("");
   }
