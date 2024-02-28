@@ -61,8 +61,6 @@ function App({ wordData, dictionary, stateMap }) {
   };
 
   const submitWord = () => {
-    console.log("State");
-    console.log(this);
     const currentWord = getCurrentWord(guessState, guessNumber).toUpperCase();
     const ans = [];
     const correct_letters = correctLetters;
