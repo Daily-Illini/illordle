@@ -9,10 +9,11 @@ import {
   hasCorrectGuess,
   getCurrentWord,
   validateWord,
+  usePersistentState,
 } from "./utils";
 import Toast from "./components/Toast";
 
-function App({ wordData, dictionary }) {
+function App({ wordData, dictionary, stateMap }) {
   const date = new Date(wordData["date"]).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -24,15 +25,15 @@ function App({ wordData, dictionary }) {
   const storyTitle = wordData["story_title"];
   const storyUrl = wordData["story_url"];
 
-  const [guessNumber, setGuessNumber] = useState(0);
+  const [guessNumber, setGuessNumber] = usePersistentState(stateMap, "guessNumber", 0);
   const [toastMessage, setToastMessage] = useState("");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [gameState, setGameState] = useState(GameState.InSession);
-  const [styleState, setStyleState] = useState(initializeBoardState(word));
-  const [guessState, setGuessState] = useState(initializeBoardState(word));
-  const [correctLetters, setCorrectLetters] = useState(new Set());
-  const [existsLetters, setExistsLetters] = useState(new Set());
-  const [wrongLetters, setWrongLetters] = useState(new Set());
+  const [modalOpen, setModalOpen] = usePersistentState(stateMap, "modalOpen", false);
+  const [gameState, setGameState] = usePersistentState(stateMap, "gameState", GameState.InSession);
+  const [styleState, setStyleState] = usePersistentState(stateMap, "styleState", initializeBoardState(word));
+  const [guessState, setGuessState] = usePersistentState(stateMap, "guessState", initializeBoardState(word));
+  const [correctLetters, setCorrectLetters] = usePersistentState(stateMap, "correctLetters", new Set());
+  const [existsLetters, setExistsLetters] = usePersistentState(stateMap, "existsLetters", new Set());
+  const [wrongLetters, setWrongLetters] = usePersistentState(stateMap, "wrongLetters", new Set());
 
   useEffect(() => {
     if (gameState !== GameState.InSession) {
@@ -60,6 +61,8 @@ function App({ wordData, dictionary }) {
   };
 
   const submitWord = () => {
+    console.log("State");
+    console.log(this);
     const currentWord = getCurrentWord(guessState, guessNumber).toUpperCase();
     const ans = [];
     const correct_letters = correctLetters;

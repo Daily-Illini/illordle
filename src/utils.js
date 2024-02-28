@@ -1,7 +1,9 @@
+import { useState } from "react";
+
 export const GameState = {
-  InSession: Symbol("InSession"),
-  Lose: Symbol("Lose"),
-  Win: Symbol("Win"),
+  InSession: "InSession",
+  Lose: "Lose",
+  Win: "Win",
 };
 
 // Create a 2d array, which would be a word.length + 1 by word.length dimensions
@@ -53,5 +55,57 @@ export const createShareResultEmojis = (styleState) => {
   return [retText, copyText.join("\n").trim()];
 };
 
-// gets word and article
-export const getData = () => {};
+export const loadPersistentState = (uniqueKey) => {
+  const state = localStorage.getItem("persistentState1.0");
+  if (state) {
+    const stateMap = new Map(JSON.parse(state, (key, value) => {
+      if (value instanceof Object && Object.hasOwn(value, "dataType")) {
+        if (value.dataType === "Map") {
+          return new Map(value.value);
+        } else if (value.dataType === "Set") {
+          return new Set(value.value);
+        }
+      }
+
+      return value;
+    }));
+
+    if (stateMap.get("uniqueKey") === uniqueKey) {
+      return stateMap
+    }
+  }
+
+  return new Map([["uniqueKey", uniqueKey]]);
+}
+
+export const savePersistentState = (stateMap) => {
+  const state = JSON.stringify(Array.from(stateMap.entries()), (key, value) => {
+    if (value instanceof Map) {
+      return {
+        dataType: "Map",
+        value: Array.from(value.entries()),
+      }
+    } else if (value instanceof Set) {
+      return {
+        dataType: "Set",
+        value: Array.from(value),
+      }
+    } else {
+      return value;
+    }
+  });
+  localStorage.setItem("persistentState1.0", state);
+}
+
+export const usePersistentState = (stateMap, key, initialValue) => {
+  const value = stateMap.has(key)? stateMap.get(key) : initialValue;
+  const [state, setState] = useState(value);
+
+  const onChange = (newValue) => {
+    stateMap.set(key, newValue);
+    savePersistentState(stateMap);
+    return setState(newValue);
+  }
+
+  return [state, onChange];
+}
