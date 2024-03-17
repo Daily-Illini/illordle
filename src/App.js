@@ -3,6 +3,7 @@ import "./App.css";
 import Board from "./components/Board";
 import Keyboard from "react-simple-keyboard";
 import GameStateModal from "./components/GameStateModal";
+import StartUpModal from "./components/StartUpModal";
 import {
   GameState,
   initializeBoardState,
@@ -23,15 +24,16 @@ function App({ wordData, dictionary }) {
   const author = wordData["author"];
   const storyTitle = wordData["story_title"];
   const storyUrl = wordData["story_url"];
-
   const [guessNumber, setGuessNumber] = useState(0);
   const [toastMessage, setToastMessage] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [startupModalOpen, setStartupModalOpen] = useState(false);
   const [gameState, setGameState] = useState(GameState.InSession);
   const [styleState, setStyleState] = useState(initializeBoardState(word));
   const [guessState, setGuessState] = useState(initializeBoardState(word));
   const [correctLetters, setCorrectLetters] = useState(new Set());
   const [existsLetters, setExistsLetters] = useState(new Set());
+  const [consecutiveLetters, setConsecutiveLetters] = useState(new Set())
   const [wrongLetters, setWrongLetters] = useState(new Set());
 
   useEffect(() => {
@@ -39,6 +41,16 @@ function App({ wordData, dictionary }) {
       setModalOpen(true);
     }
   }, [gameState]);
+
+  useEffect(() => {
+    if (gameState === GameState.InSession) {
+      setStartupModalOpen(true)
+    }
+  }, [gameState])
+
+  const closeModal = () => {
+    setStartupModalOpen(false);
+  };
 
   const showMessage = message => {
     console.log(message);
@@ -65,6 +77,8 @@ function App({ wordData, dictionary }) {
     const correct_letters = correctLetters;
     const exists_letters = existsLetters;
     const wrong_letters = wrongLetters;
+    const consecutive_letters = consecutiveLetters;
+    let consecutive_count = 0;
 
     const letterCount = new Map();
     const correctCount = new Map();
@@ -85,20 +99,31 @@ function App({ wordData, dictionary }) {
         ans.push("bg-correct text-white");
         correct_letters.add(currentLetter);
         exists_letters.delete(currentLetter);
+        consecutive_count ++;
+
       } else if (letterCount.has(currentLetter)) {
         const remaining = letterCount.get(currentLetter) - (correctCount.get(currentLetter) ?? 0);
         if (remaining <= (existsCount.get(currentLetter) ?? 0)) {
           ans.push("bg-wrong dark:bg-wrong-dark text-white");
+          consecutive_count = 0
         } else {
           ans.push("bg-exist text-white");
           existsCount.set(currentLetter, (existsCount.get(currentLetter) ?? 0) + 1);
           if (!correctCount.has(currentLetter)) {
             exists_letters.add(currentLetter);
+            //increment consecutive count
+            consecutive_count++;
+            if(consecutive_count >= 3) {
+              ans.push("bg-consecutive text-white")
+              consecutive_letters.add(currentLetter)
+            }
+
           }
         }
       } else {
         wrong_letters.add(currentLetter);
         ans.push("bg-wrong dark:bg-wrong-dark text-white");
+        consecutive_count = 0;
       }
     }
 
@@ -109,6 +134,7 @@ function App({ wordData, dictionary }) {
     setCorrectLetters(correct_letters);
     setExistsLetters(exists_letters);
     setWrongLetters(wrong_letters);
+    setConsecutiveLetters(consecutive_letters)
   };
 
   const handleEnter = () => {
@@ -174,6 +200,10 @@ function App({ wordData, dictionary }) {
 
   return (
     <div className="relative">
+      <StartUpModal
+      modalOpen={startupModalOpen}
+      closeModal={closeModal}
+      />
       <GameStateModal
         answer={word}
         date={date}

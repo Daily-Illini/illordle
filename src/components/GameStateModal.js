@@ -1,6 +1,5 @@
 import React from "react";
 import { GameState } from "../utils";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 import { createShareResultEmojis } from "../utils";
 import ArticlePreview from "./ArticlePreview";
 

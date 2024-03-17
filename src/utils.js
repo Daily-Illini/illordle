@@ -42,6 +42,8 @@ export const createShareResultEmojis = (styleState) => {
         copyText[i][j] = "🟨";
       } else if (styleState[i][j].includes("wrong")) {
         copyText[i][j] = "⬛";
+      } else if (styleState[i][j].includes("consecutive")) {
+        copyText[i][j] = "🟪"
       }
     }
     copyText[i] = copyText[i].join("");
